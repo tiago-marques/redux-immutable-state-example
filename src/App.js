@@ -1,28 +1,45 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+
+  onChangeName = e => {
+    this.props.updateName(e.target.value)
+  }
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <h2>Change prop name from immutable model with Redux</h2>
+          <input type='text' name='name' value={this.props.people.name} onChange={this.onChangeName} />
         </header>
       </div>
     );
   }
 }
 
-export default App;
+//State
+const mapStateToProps = state => {
+  return {
+    people: state.PeopleReducer
+  }
+}
+
+//Action
+const updateName = payload => ({
+  type: 'UPDATE_NAME',
+  payload
+})
+
+//Map action
+const mapDispatchToProps = (dispatch) => bindActionCreators({updateName}, dispatch)
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
